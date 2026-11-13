@@ -1,0 +1,47 @@
+<div class="container mt-4">
+    <h1 class="text-center">Lista de empleados</h1>
+    <a routerLink="/agregar" class="btn btn-primary">Agregar empleado</a>
+    <button type="button" class="btn btn-secondary ms-2" (click)="cargar()" [disabled]="cargando() || eliminando() !== null">Recargar</button>
+    @if (cargando()) { <p role="status">Cargando empleados…</p> }
+    @if (error()) { <div class="alert alert-danger" role="alert">{{ error() }}</div> }
+    <div class='container mt-3'>
+
+        <table class="table table-striped">
+            <thead class="table-dark">
+            <tr>    
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Edad</th>
+                <th>Email</th>
+                <th>Salario</th>
+                <th>Horas</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (empleado of empleados(); track empleado.id) {
+                <tr>
+                    <td>{{ empleado.id }}</td>
+                    <td>{{ empleado.nombre }}</td>
+                    <td>{{ empleado.apellido }}</td>
+                    <td>{{ empleado.edad }}</td>
+                    <td>{{ empleado.email }}</td>
+                    <td>{{ empleado.salario }}</td>
+                    <td>{{ empleado.horas }}</td>
+                    <td>
+                        <a class="btn btn-warning" [routerLink]="['/actualizar', empleado.id]">Actualizar</a>
+                        <button type="button" class="btn btn-danger ms-2" (click)="eliminar(empleado.id)" [disabled]="eliminando() !== null || cargando()">
+                            {{ eliminando() === empleado.id ? 'Eliminando…' : 'Eliminar' }}
+                        </button>
+                    </td>
+                </tr>
+            } @empty {
+                @if (!cargando() && !error()) {
+                    <tr><td colspan="8">No hay empleados registrados.</td></tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
